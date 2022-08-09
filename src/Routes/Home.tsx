@@ -53,11 +53,30 @@ const Row = styled(motion.div)`
 
 const Box = styled(motion.div)<{ sliderPhoto: string }>`
   background-color: white;
-  color: blue;
-  height: 150px;
+  height: 120px;
   background-image: url(${(props) => props.sliderPhoto});
   background-size: cover;
   background-position: center;
+  &:first-child {
+    transform-origin: center left;
+  }
+  &:last-child {
+    transform-origin: center right;
+  }
+  cursor: pointer;
+`;
+
+const Info = styled(motion.div)`
+  padding: 7px;
+  background-color: ${(props) => props.theme.black.lighter};
+  opacity: 0;
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  h4 {
+    text-align: center;
+    font-size: 12px;
+  }
 `;
 
 const rowVariants = {
@@ -67,6 +86,19 @@ const rowVariants = {
 };
 
 const offset = 6;
+
+const boxVariants = {
+  normal: { scale: 1 },
+  hover: {
+    scale: 1.3,
+    y: -50,
+    transition: { delay: 0.4, duration: 0.3 },
+  },
+};
+
+const infoVariants = {
+  hover: { opacity: 1, transition: { delay: 0.4, duration: 0.3 } },
+};
 
 function Home() {
   const { data, isLoading } = useQuery<IGetMoviesResult>(
@@ -118,7 +150,15 @@ function Home() {
                     <Box
                       key={movie.id}
                       sliderPhoto={makeImagePath(movie.backdrop_path, "w500")}
-                    />
+                      variants={boxVariants}
+                      initial="normal"
+                      whileHover="hover"
+                      transition={{ type: "tween" }}
+                    >
+                      <Info variants={infoVariants}>
+                        <h4>{movie.title}</h4>
+                      </Info>
+                    </Box>
                   ))}
               </Row>
             </AnimatePresence>
