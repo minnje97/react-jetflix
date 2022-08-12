@@ -167,7 +167,6 @@ function Home() {
   const clickedMovie =
     bigMovieMatch?.params.movieId &&
     data?.results.find((obj) => obj.id === +bigMovieMatch?.params.movieId!);
-  console.log(clickedMovie);
   const onClickOverlay = () => {
     navigate(-1);
   };
