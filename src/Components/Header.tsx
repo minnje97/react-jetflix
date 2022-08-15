@@ -165,7 +165,7 @@ function Header() {
             animate={inputAnimation}
             initial={{ scaleX: 0 }}
             transition={{ type: "linear" }}
-            placeholder="영화나 TV프로그램을 검색하세요!"
+            placeholder="제목, 사람, 장르"
           />
           <motion.svg
             onClick={toggleSearch}

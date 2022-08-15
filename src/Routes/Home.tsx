@@ -1,6 +1,11 @@
 import { useQuery } from "react-query";
 import styled from "styled-components";
-import { getMovies, IGetMoviesResult } from "../api";
+import {
+  getMovies,
+  getPopMovies,
+  IGetMoviesResult,
+  IGetPopMovies,
+} from "../api";
 import { makeImagePath } from "../utils";
 import { motion, AnimatePresence, useViewportScroll } from "framer-motion";
 import { useState } from "react";
@@ -8,7 +13,6 @@ import { useMatch, useNavigate } from "react-router-dom";
 
 const Wrapper = styled.div`
   background-color: black;
-  height: 200vh;
 `;
 
 const Loader = styled.div`
@@ -24,28 +28,30 @@ const Banner = styled.div<{ bgPhoto: string }>`
   display: flex;
   flex-direction: column;
   justify-content: center;
-  padding: 60px;
+  padding: 50px;
   background-image: linear-gradient(rgba(0, 0, 0, 0), rgba(0, 0, 0, 1)),
     url(${(props) => props.bgPhoto});
   background-size: cover;
 `;
 
 const Title = styled.h2`
-  font-size: 45px;
-  margin-bottom: 10px;
+  font-size: 60px;
+  margin-bottom: 15px;
 `;
 
 const Overview = styled.p`
-  font-size: 17px;
-  width: 50%;
+  font-size: 16px;
+  font-weight: 500;
+  width: 35%;
 `;
 
 const Slider = styled.div`
   position: relative;
-  top: -150px;
+  top: -100px;
 `;
 
 const Row = styled(motion.div)`
+  padding: 0px 30px;
   display: grid;
   position: absolute;
   gap: 5px;
@@ -56,6 +62,7 @@ const Row = styled(motion.div)`
 const Box = styled(motion.div)<{ sliderPhoto: string }>`
   background-color: white;
   height: 120px;
+  border-radius: 3px;
   background-image: radial-gradient(rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.3)),
     url(${(props) => props.sliderPhoto});
   background-size: cover;
@@ -83,9 +90,9 @@ const Info = styled(motion.div)`
 `;
 
 const rowVariants = {
-  hidden: { x: window.outerWidth - 10 },
+  hidden: { x: window.outerWidth },
   visible: { x: 0 },
-  exit: { x: -window.outerWidth + 10 },
+  exit: { x: -window.outerWidth },
 };
 
 const Overlay = styled(motion.div)`
@@ -145,17 +152,22 @@ function Home() {
   const navigate = useNavigate();
   const { scrollY } = useViewportScroll();
   const bigMovieMatch = useMatch("/movies/:movieId");
-  const { data, isLoading } = useQuery<IGetMoviesResult>(
+  const { data: nowData, isLoading: nowLoading } = useQuery<IGetMoviesResult>(
     ["movies", "nowPlaying"],
     getMovies
   );
+  const { data: popData, isLoading: popLoading } = useQuery<IGetPopMovies>(
+    ["movies", "popular"],
+    getPopMovies
+  );
+  console.log(popData, popLoading);
   const [index, setIndex] = useState(0);
   const [leaving, setLeaving] = useState(false);
   const incrIndex = () => {
-    if (data) {
+    if (nowData) {
       if (leaving) return;
       toggleLeaving();
-      const totalMovies = data?.results.length - 1;
+      const totalMovies = nowData?.results.length - 1;
       const maxIndex = Math.floor(totalMovies / offset) - 1;
       setIndex((index) => (index === maxIndex ? 0 : index + 1));
     }
@@ -166,24 +178,24 @@ function Home() {
   };
   const clickedMovie =
     bigMovieMatch?.params.movieId &&
-    data?.results.find((obj) => obj.id === +bigMovieMatch?.params.movieId!);
+    nowData?.results.find((obj) => obj.id === +bigMovieMatch?.params.movieId!);
   const onClickOverlay = () => {
     navigate(-1);
   };
-  const wholeOV = data?.results[0].overview;
-  const OV = wholeOV?.substring(0, wholeOV.length - 100);
+  const wholeOV = popData?.results[5].overview;
+  const OV = wholeOV?.substring(0, wholeOV.length / 5);
   return (
     <Wrapper>
-      {isLoading ? (
+      {nowLoading || popLoading ? (
         <Loader>Loading...</Loader>
       ) : (
         <>
           <Banner
             onClick={incrIndex}
-            bgPhoto={makeImagePath(data?.results[0].backdrop_path!)}
+            bgPhoto={makeImagePath(popData?.results[5].backdrop_path!)}
           >
-            <Title>{data?.results[0].title}</Title>
-            <Overview>{wholeOV?.length! > 200 ? OV + "..." : wholeOV}</Overview>
+            <Title>{popData?.results[5].title}</Title>
+            <Overview>{wholeOV?.length! > 100 ? OV + "..." : wholeOV}</Overview>
           </Banner>
           <Slider>
             <AnimatePresence initial={false} onExitComplete={toggleLeaving}>
@@ -195,7 +207,7 @@ function Home() {
                 exit="exit"
                 key={index}
               >
-                {data?.results
+                {nowData?.results
                   .slice(1)
                   .slice(offset * index, offset * index + offset)
                   .map((movie) => (

@@ -20,8 +20,25 @@ export interface IGetMoviesResult {
   total_results: number;
 }
 
-export function getMovies() {
-  return fetch(
+export interface IGetPopMovies {
+  page: number;
+  results: IMovie[];
+  total_pages: number;
+  total_results: number;
+}
+
+export async function getMovies() {
+  const response = await fetch(
     `${BASE_PATH}/movie/now_playing?api_key=${API_KEY}&language=ko-KR&page=1&region=kr`
-  ).then((response) => response.json());
+  );
+  return await response.json();
+}
+
+export async function getPopMovies() {
+  const data = await (
+    await fetch(
+      `${BASE_PATH}/movie/popular?api_key=${API_KEY}&language=ko-KR&page=1&region=kr`
+    )
+  ).json();
+  return data;
 }
