@@ -78,6 +78,7 @@ const logoVariants = {
   active: {
     fillOpacity: [0, 0.4, 0, 0.7, 0, 0.9],
     duration: 3,
+    transition: { Infinity },
   },
 };
 
@@ -153,7 +154,7 @@ function Header() {
             {homeMatch && <Circle layoutId="circle" />}
           </Item>
           <Item>
-            <Link to="tv">TV 프로그램</Link>
+            <Link to="/tv">TV 프로그램</Link>
             {tvMatch && <Circle layoutId="circle" />}
           </Item>
         </Items>
