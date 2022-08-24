@@ -166,7 +166,7 @@ function Header() {
             animate={inputAnimation}
             initial={{ scaleX: 0 }}
             transition={{ type: "linear" }}
-            placeholder="제목, 사람, 장르"
+            placeholder="제목, 사람"
           />
           <motion.svg
             onClick={toggleSearch}
