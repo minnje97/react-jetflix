@@ -32,6 +32,19 @@ export interface IGetTvs {
   total_results: number;
 }
 
+export interface IKeyword {
+  keyword: string | null;
+}
+
+export async function multiSearch({ keyword }: IKeyword) {
+  const data = await (
+    await fetch(
+      `${BASE_PATH}/search/multi?api_key=${API_KEY}&language=ko-KR&query=${keyword}&page=1&include_adult=false&region=kr`
+    )
+  ).json();
+  return data;
+}
+
 export async function getMovies() {
   const response = await fetch(
     `${BASE_PATH}/movie/now_playing?api_key=${API_KEY}&${LANGUAGE_REGION}`
@@ -60,7 +73,7 @@ export async function getTopMovies() {
 export async function getPopTv() {
   const data = await (
     await fetch(
-      `${BASE_PATH}/tv/popular?api_key=${API_KEY}&language=ko-KR&page=1`
+      `${BASE_PATH}/tv/popular?api_key=${API_KEY}&language=ko-KR&page=maximum%3A15`
     )
   ).json();
   return data;
@@ -69,7 +82,7 @@ export async function getPopTv() {
 export async function getTopTv() {
   const data = await (
     await fetch(
-      `${BASE_PATH}/tv/top_rated?api_key=${API_KEY}&language=ko-KR&page=1`
+      `${BASE_PATH}/tv/top_rated?api_key=${API_KEY}&language=ko-KR&page=maximum%3A15`
     )
   ).json();
   return data;
@@ -78,7 +91,7 @@ export async function getTopTv() {
 export async function getNowTv() {
   const data = await (
     await fetch(
-      `${BASE_PATH}/tv/on_the_air?api_key=${API_KEY}&language=ko-KR&page=1`
+      `${BASE_PATH}/tv/on_the_air?api_key=${API_KEY}&language=ko-KR&page=maximum%3A15`
     )
   ).json();
   return data;

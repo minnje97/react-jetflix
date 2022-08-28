@@ -5,19 +5,20 @@ import { makeImagePath } from "../utils";
 import { motion, AnimatePresence, useViewportScroll } from "framer-motion";
 import { useState } from "react";
 import { useMatch, useNavigate } from "react-router-dom";
+import { Div, Rarr, rarrVariants } from "./Home";
 
 const Row = styled(motion.div)`
   padding: 0px 30px;
   display: grid;
   gap: 5px;
   position: absolute;
-  grid-template-columns: repeat(6, 1fr);
+  grid-template-columns: repeat(5, 1fr);
   width: 100%;
 `;
 
 const Box = styled(motion.div)<{ sliderphoto: string }>`
   background-color: white;
-  height: 120px;
+  height: 130px;
   border-radius: 3px;
   background-image: radial-gradient(rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.3)),
     url(${(props) => props.sliderphoto});
@@ -163,7 +164,7 @@ const BigOverview = styled.p`
   padding: 5px;
 `;
 
-const offset = 6;
+const offset = 5;
 
 function Tv() {
   const navigate = useNavigate();
@@ -231,9 +232,17 @@ function Tv() {
           </Banner>
           <SliderWrapper>
             <Slider>
-              <SliderTitle onClick={() => incrIndex("popTvIndex")}>
-                지금 뜨는 TV 프로그램
-              </SliderTitle>
+              <Div>
+                <SliderTitle>지금 뜨는 TV 프로그램</SliderTitle>
+                <Rarr
+                  onClick={() => incrIndex("popTvIndex")}
+                  variants={rarrVariants}
+                  initial="start"
+                  whileHover="hover"
+                >
+                  ▶
+                </Rarr>
+              </Div>
               <AnimatePresence initial={false} onExitComplete={toggleLeaving}>
                 <Row
                   variants={rowVariants}
@@ -266,9 +275,17 @@ function Tv() {
               </AnimatePresence>
             </Slider>
             <Slider>
-              <SliderTitle onClick={() => incrIndex("topTvIndex")}>
-                좋은 평을 받은 TV 프로그램
-              </SliderTitle>
+              <Div>
+                <SliderTitle>좋은 평을 받은 TV 프로그램</SliderTitle>
+                <Rarr
+                  onClick={() => incrIndex("topTvIndex")}
+                  variants={rarrVariants}
+                  initial="start"
+                  whileHover="hover"
+                >
+                  ▶
+                </Rarr>
+              </Div>
               <AnimatePresence initial={false} onExitComplete={toggleLeaving}>
                 <Row
                   variants={rowVariants}
@@ -301,9 +318,17 @@ function Tv() {
               </AnimatePresence>
             </Slider>
             <Slider>
-              <SliderTitle onClick={() => incrIndex("nowTvIndex")}>
-                매주 새로운 에피소드
-              </SliderTitle>
+              <Div>
+                <SliderTitle>매주 새로운 에피소드</SliderTitle>
+                <Rarr
+                  onClick={() => incrIndex("nowTvIndex")}
+                  variants={rarrVariants}
+                  initial="start"
+                  whileHover="hover"
+                >
+                  ▶
+                </Rarr>
+              </Div>
               <AnimatePresence initial={false} onExitComplete={toggleLeaving}>
                 <Row
                   variants={rowVariants}

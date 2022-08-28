@@ -11,13 +11,13 @@ const Row = styled(motion.div)`
   display: grid;
   gap: 5px;
   position: absolute;
-  grid-template-columns: repeat(6, 1fr);
+  grid-template-columns: repeat(5, 1fr);
   width: 100%;
 `;
 
 const Box = styled(motion.div)<{ sliderPhoto: string }>`
   background-color: white;
-  height: 120px;
+  height: 130px;
   border-radius: 3px;
   background-image: radial-gradient(rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.3)),
     url(${(props) => props.sliderPhoto});
@@ -51,7 +51,7 @@ const rowVariants = {
   exit: { x: -window.outerWidth },
 };
 
-const boxVariants = {
+export const boxVariants = {
   normal: { scale: 1 },
   hover: {
     scale: 1.3,
@@ -60,7 +60,7 @@ const boxVariants = {
   },
 };
 
-const infoVariants = {
+export const infoVariants = {
   hover: { opacity: 1, transition: { delay: 0.4, duration: 0.3 } },
 };
 
@@ -125,7 +125,7 @@ const SliderTitle = styled.div`
   text-shadow: 5px 5px 5px rgba(0, 0, 0, 0.7);
 `;
 
-const Overlay = styled(motion.div)`
+export const Overlay = styled(motion.div)`
   position: fixed;
   top: 0;
   width: 100%;
@@ -163,13 +163,31 @@ const BigOverview = styled.p`
   padding: 5px;
 `;
 
-const offset = 6;
+export const Rarr = styled(motion.span)`
+  color: ${(props) => props.theme.white.darker};
+  position: relative;
+  right: 30px;
+  font-size: 20px;
+  cursor: pointer;
+`;
+
+export const Div = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+`;
+
+export const rarrVariants = {
+  start: { opacity: 0.6 },
+  hover: { opacity: 1, scale: 1.2 },
+};
+
+const offset = 5;
 
 function Home() {
   const navigate = useNavigate();
   const { scrollY } = useViewportScroll();
   const bigMovieMatch = useMatch("/movies/:movieId");
-  console.log(bigMovieMatch);
   const { data: nowData, isLoading: nowLoading } = useQuery<IGetMovies>(
     ["movies", "nowPlaying"],
     getMovies
@@ -237,9 +255,17 @@ function Home() {
           </Banner>
           <SliderWrapper>
             <Slider>
-              <SliderTitle onClick={() => incrIndex("nowIndex")}>
-                지금 상영 중인 영화
-              </SliderTitle>
+              <Div>
+                <SliderTitle>지금 상영 중인 영화</SliderTitle>
+                <Rarr
+                  onClick={() => incrIndex("nowIndex")}
+                  variants={rarrVariants}
+                  initial="start"
+                  whileHover="hover"
+                >
+                  ▶
+                </Rarr>
+              </Div>
               <AnimatePresence initial={false} onExitComplete={toggleLeaving}>
                 <Row
                   variants={rowVariants}
@@ -272,9 +298,17 @@ function Home() {
               </AnimatePresence>
             </Slider>
             <Slider>
-              <SliderTitle onClick={() => incrIndex("popIndex")}>
-                지금 뜨는 콘텐츠
-              </SliderTitle>
+              <Div>
+                <SliderTitle>지금 뜨는 콘텐츠</SliderTitle>
+                <Rarr
+                  onClick={() => incrIndex("popIndex")}
+                  variants={rarrVariants}
+                  initial="start"
+                  whileHover="hover"
+                >
+                  ▶
+                </Rarr>
+              </Div>
               <AnimatePresence initial={false} onExitComplete={toggleLeaving}>
                 <Row
                   variants={rowVariants}
@@ -307,9 +341,17 @@ function Home() {
               </AnimatePresence>
             </Slider>
             <Slider>
-              <SliderTitle onClick={() => incrIndex("topIndex")}>
-                높은 등급을 받은 영화
-              </SliderTitle>
+              <Div>
+                <SliderTitle>높은 등급을 받은 영화</SliderTitle>
+                <Rarr
+                  onClick={() => incrIndex("topIndex")}
+                  variants={rarrVariants}
+                  initial="start"
+                  whileHover="hover"
+                >
+                  ▶
+                </Rarr>
+              </Div>
               <AnimatePresence initial={false} onExitComplete={toggleLeaving}>
                 <Row
                   variants={rowVariants}
