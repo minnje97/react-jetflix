@@ -2,7 +2,12 @@ import { useQuery } from "react-query";
 import styled from "styled-components";
 import { getNowTv, getPopTv, getTopTv, IGetTvs } from "../api";
 import { makeImagePath } from "../utils";
-import { motion, AnimatePresence, useViewportScroll } from "framer-motion";
+import {
+  motion,
+  AnimatePresence,
+  useViewportScroll,
+  LayoutGroup,
+} from "framer-motion";
 import { useState } from "react";
 import { useMatch, useNavigate } from "react-router-dom";
 import { Div, Rarr, rarrVariants } from "./Home";
@@ -170,7 +175,6 @@ function Tv() {
   const navigate = useNavigate();
   const { scrollY } = useViewportScroll();
   const bigTvMatch = useMatch("/tv/:tvId");
-  console.log(bigTvMatch);
   const { data: popTvData, isLoading: popTvLoading } = useQuery<IGetTvs>(
     ["tv", "popular"],
     getPopTv
@@ -218,7 +222,7 @@ function Tv() {
   const onClickOverlay = () => {
     navigate(-1);
   };
-  const wholeOV = topTvData?.results[3].overview;
+  const wholeOV = topTvData?.results[0].overview;
   const OV = wholeOV?.substring(0, wholeOV.length / 3.1);
   return (
     <Wrapper>
@@ -226,168 +230,187 @@ function Tv() {
         <Loader>Loading...</Loader>
       ) : (
         <>
-          <Banner bgPhoto={makeImagePath(topTvData?.results[3].backdrop_path!)}>
-            <Title>{topTvData?.results[3].name}</Title>
+          <Banner bgPhoto={makeImagePath(topTvData?.results[0].backdrop_path!)}>
+            <Title>{topTvData?.results[0].name}</Title>
             <Overview>{wholeOV?.length! > 100 ? OV : wholeOV}</Overview>
           </Banner>
           <SliderWrapper>
-            <Slider>
-              <Div>
-                <SliderTitle>지금 뜨는 TV 프로그램</SliderTitle>
-                <Rarr
-                  onClick={() => incrIndex("popTvIndex")}
-                  variants={rarrVariants}
-                  initial="start"
-                  whileHover="hover"
-                >
-                  ▶
-                </Rarr>
-              </Div>
-              <AnimatePresence initial={false} onExitComplete={toggleLeaving}>
-                <Row
-                  variants={rowVariants}
-                  transition={{ type: "tween", duration: 1.5 }}
-                  initial="hidden"
-                  animate="visible"
-                  exit="exit"
-                  key={popTvIndex}
-                >
-                  {popTvData?.results
-                    .slice(1)
-                    .slice(offset * popTvIndex, offset * popTvIndex + offset)
-                    .map((movie) => (
-                      <Box
-                        key={movie.id}
-                        sliderphoto={makeImagePath(movie.backdrop_path, "w500")}
-                        variants={boxVariants}
-                        initial="normal"
-                        whileHover="hover"
-                        transition={{ type: "tween" }}
-                        onClick={() => onBoxClicked(movie.id)}
-                        layoutId={movie.id + ""}
-                      >
-                        <Info variants={infoVariants}>
-                          <h4>{movie.name}</h4>
-                        </Info>
-                      </Box>
-                    ))}
-                </Row>
-              </AnimatePresence>
-            </Slider>
-            <Slider>
-              <Div>
-                <SliderTitle>좋은 평을 받은 TV 프로그램</SliderTitle>
-                <Rarr
-                  onClick={() => incrIndex("topTvIndex")}
-                  variants={rarrVariants}
-                  initial="start"
-                  whileHover="hover"
-                >
-                  ▶
-                </Rarr>
-              </Div>
-              <AnimatePresence initial={false} onExitComplete={toggleLeaving}>
-                <Row
-                  variants={rowVariants}
-                  transition={{ type: "tween", duration: 1.5 }}
-                  initial="hidden"
-                  animate="visible"
-                  exit="exit"
-                  key={topTvIndex}
-                >
-                  {topTvData?.results
-                    .slice(1)
-                    .slice(offset * popTvIndex, offset * popTvIndex + offset)
-                    .map((movie) => (
-                      <Box
-                        key={movie.id}
-                        sliderphoto={makeImagePath(movie.backdrop_path, "w500")}
-                        variants={boxVariants}
-                        initial="normal"
-                        whileHover="hover"
-                        transition={{ type: "tween" }}
-                        onClick={() => onBoxClicked(movie.id)}
-                        layoutId={movie.id + ""}
-                      >
-                        <Info variants={infoVariants}>
-                          <h4>{movie.name}</h4>
-                        </Info>
-                      </Box>
-                    ))}
-                </Row>
-              </AnimatePresence>
-            </Slider>
-            <Slider>
-              <Div>
-                <SliderTitle>매주 새로운 에피소드</SliderTitle>
-                <Rarr
-                  onClick={() => incrIndex("nowTvIndex")}
-                  variants={rarrVariants}
-                  initial="start"
-                  whileHover="hover"
-                >
-                  ▶
-                </Rarr>
-              </Div>
-              <AnimatePresence initial={false} onExitComplete={toggleLeaving}>
-                <Row
-                  variants={rowVariants}
-                  transition={{ type: "tween", duration: 1.5 }}
-                  initial="hidden"
-                  animate="visible"
-                  exit="exit"
-                  key={nowTvIndex}
-                >
-                  {nowTvData?.results
-                    .slice(1)
-                    .slice(offset * popTvIndex, offset * popTvIndex + offset)
-                    .map((movie) => (
-                      <Box
-                        key={movie.id}
-                        sliderphoto={makeImagePath(movie.backdrop_path, "w500")}
-                        variants={boxVariants}
-                        initial="normal"
-                        whileHover="hover"
-                        transition={{ type: "tween" }}
-                        onClick={() => onBoxClicked(movie.id)}
-                        layoutId={movie.id + ""}
-                      >
-                        <Info variants={infoVariants}>
-                          <h4>{movie.name}</h4>
-                        </Info>
-                      </Box>
-                    ))}
-                </Row>
-              </AnimatePresence>
-            </Slider>
+            <LayoutGroup id="1">
+              <Slider>
+                <Div>
+                  <SliderTitle>지금 뜨는 TV 프로그램</SliderTitle>
+                  <Rarr
+                    onClick={() => incrIndex("popTvIndex")}
+                    variants={rarrVariants}
+                    initial="start"
+                    whileHover="hover"
+                  >
+                    ▶
+                  </Rarr>
+                </Div>
+                <AnimatePresence initial={false} onExitComplete={toggleLeaving}>
+                  <Row
+                    variants={rowVariants}
+                    transition={{ type: "tween", duration: 1.5 }}
+                    initial="hidden"
+                    animate="visible"
+                    exit="exit"
+                    key={popTvIndex}
+                  >
+                    {popTvData?.results
+                      .slice(1)
+                      .slice(offset * popTvIndex, offset * popTvIndex + offset)
+                      .map((movie) => (
+                        <Box
+                          key={movie.id}
+                          sliderphoto={makeImagePath(
+                            movie.backdrop_path,
+                            "w500"
+                          )}
+                          variants={boxVariants}
+                          initial="normal"
+                          whileHover="hover"
+                          transition={{ type: "tween" }}
+                          onClick={() => onBoxClicked(movie.id)}
+                          layoutId={movie.id + ""}
+                        >
+                          <Info variants={infoVariants}>
+                            <h4>{movie.name}</h4>
+                          </Info>
+                        </Box>
+                      ))}
+                  </Row>
+                </AnimatePresence>
+              </Slider>
+            </LayoutGroup>
+            <LayoutGroup id="2">
+              <Slider>
+                <Div>
+                  <SliderTitle>좋은 평을 받은 TV 프로그램</SliderTitle>
+                  <Rarr
+                    onClick={() => incrIndex("topTvIndex")}
+                    variants={rarrVariants}
+                    initial="start"
+                    whileHover="hover"
+                  >
+                    ▶
+                  </Rarr>
+                </Div>
+                <AnimatePresence initial={false} onExitComplete={toggleLeaving}>
+                  <Row
+                    variants={rowVariants}
+                    transition={{ type: "tween", duration: 1.5 }}
+                    initial="hidden"
+                    animate="visible"
+                    exit="exit"
+                    key={topTvIndex}
+                  >
+                    {topTvData?.results
+                      .slice(2)
+                      .slice(offset * popTvIndex, offset * popTvIndex + offset)
+                      .map((movie) => (
+                        <Box
+                          key={movie.id}
+                          sliderphoto={makeImagePath(
+                            movie.backdrop_path,
+                            "w500"
+                          )}
+                          variants={boxVariants}
+                          initial="normal"
+                          whileHover="hover"
+                          transition={{ type: "tween" }}
+                          onClick={() => onBoxClicked(movie.id)}
+                          layoutId={movie.id + ""}
+                        >
+                          <Info variants={infoVariants}>
+                            <h4>{movie.name}</h4>
+                          </Info>
+                        </Box>
+                      ))}
+                  </Row>
+                </AnimatePresence>
+              </Slider>
+            </LayoutGroup>
+            <LayoutGroup id="3">
+              <Slider>
+                <Div>
+                  <SliderTitle>매주 새로운 에피소드</SliderTitle>
+                  <Rarr
+                    onClick={() => incrIndex("nowTvIndex")}
+                    variants={rarrVariants}
+                    initial="start"
+                    whileHover="hover"
+                  >
+                    ▶
+                  </Rarr>
+                </Div>
+                <AnimatePresence initial={false} onExitComplete={toggleLeaving}>
+                  <Row
+                    variants={rowVariants}
+                    transition={{ type: "tween", duration: 1.5 }}
+                    initial="hidden"
+                    animate="visible"
+                    exit="exit"
+                    key={nowTvIndex}
+                  >
+                    {nowTvData?.results
+                      .slice(1)
+                      .slice(offset * popTvIndex, offset * popTvIndex + offset)
+                      .map((movie) => (
+                        <Box
+                          key={movie.id}
+                          sliderphoto={makeImagePath(
+                            movie.backdrop_path,
+                            "w500"
+                          )}
+                          variants={boxVariants}
+                          initial="normal"
+                          whileHover="hover"
+                          transition={{ type: "tween" }}
+                          onClick={() => onBoxClicked(movie.id)}
+                          layoutId={movie.id + ""}
+                        >
+                          <Info variants={infoVariants}>
+                            <h4>{movie.name}</h4>
+                          </Info>
+                        </Box>
+                      ))}
+                  </Row>
+                </AnimatePresence>
+              </Slider>
+            </LayoutGroup>
           </SliderWrapper>
-          <AnimatePresence>
-            {bigTvMatch ? (
-              <>
-                <Overlay
-                  onClick={onClickOverlay}
-                  animate={{ opacity: 1 }}
-                  exit={{ opacity: 0 }}
-                />
-                <BigTv
-                  layoutId={bigTvMatch.params.tvId}
-                  style={{
-                    top: scrollY.get() + 60,
-                  }}
-                >
-                  {clickedTv && (
-                    <>
-                      <BigCover
-                        src={makeImagePath(clickedTv.backdrop_path, "w500")}
-                      />
-                      <BigTitle>{clickedTv.name}</BigTitle>
-                      <BigOverview>{clickedTv.overview}</BigOverview>
-                    </>
-                  )}
-                </BigTv>
-              </>
-            ) : null}
-          </AnimatePresence>
+          {["1", "2", "3"].map((key) => (
+            <LayoutGroup id={key}>
+              <AnimatePresence>
+                {bigTvMatch ? (
+                  <>
+                    <Overlay
+                      onClick={onClickOverlay}
+                      animate={{ opacity: 1 }}
+                      exit={{ opacity: 0 }}
+                    />
+                    <BigTv
+                      layoutId={bigTvMatch.params.tvId}
+                      style={{
+                        top: scrollY.get() + 60,
+                      }}
+                    >
+                      {clickedTv && (
+                        <>
+                          <BigCover
+                            src={makeImagePath(clickedTv.backdrop_path, "w500")}
+                          />
+                          <BigTitle>{clickedTv.name}</BigTitle>
+                          <BigOverview>{clickedTv.overview}</BigOverview>
+                        </>
+                      )}
+                    </BigTv>
+                  </>
+                ) : null}
+              </AnimatePresence>
+            </LayoutGroup>
+          ))}
         </>
       )}
     </Wrapper>

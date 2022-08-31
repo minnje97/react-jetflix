@@ -1,11 +1,6 @@
 import { AnimatePresence, motion, useViewportScroll } from "framer-motion";
 import { useQuery } from "react-query";
-import {
-  Navigate,
-  useMatch,
-  useNavigate,
-  useSearchParams,
-} from "react-router-dom";
+import { useMatch, useNavigate, useSearchParams } from "react-router-dom";
 import styled from "styled-components";
 import { multiSearch } from "../api";
 import { makeImagePath } from "../utils";
@@ -21,6 +16,7 @@ interface ISearch {
 }
 
 interface ISearchResults {
+  profile_path: string;
   id: number;
   backdrop_path: string;
   poster_path: string;
@@ -49,7 +45,7 @@ const Box = styled(motion.div)<{ sliderPhoto: string }>`
   background-image: radial-gradient(rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.3)),
     url(${(props) => props.sliderPhoto});
   background-size: cover;
-  background-position: center;
+  background-position: top;
   &:first-child {
     transform-origin: center left;
   }
@@ -85,9 +81,13 @@ const BigMovie = styled(motion.div)`
   background: linear-gradient(black, rgba(0, 0, 0, 0.8));
 `;
 
-const BigCover = styled.img`
+const BigCover = styled.div<{ BigPhoto: string }>`
+  background-image: url(${(props) => props.BigPhoto});
+  background-size: contain;
+  background-position: center;
+  background-repeat: no-repeat;
   width: 100%;
-  height: 70%;
+  height: 80%;
 `;
 
 const BigTitle = styled.h2`
@@ -126,7 +126,10 @@ function Search() {
         {data?.results.map((result) => (
           <Box
             key={result.id}
-            sliderPhoto={makeImagePath(result.backdrop_path, "w500")}
+            sliderPhoto={makeImagePath(
+              result.backdrop_path || result.profile_path,
+              "w500"
+            )}
             variants={boxVariants}
             initial="normal"
             whileHover="hover"
@@ -157,7 +160,10 @@ function Search() {
               {clickedBox && (
                 <>
                   <BigCover
-                    src={makeImagePath(clickedBox.backdrop_path, "w500")}
+                    BigPhoto={makeImagePath(
+                      clickedBox.backdrop_path || clickedBox.profile_path,
+                      "w500"
+                    )}
                   />
                   <BigTitle>{clickedBox.title || clickedBox.name}</BigTitle>
                   <BigOverview>{clickedBox.overview}</BigOverview>

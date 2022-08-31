@@ -168,7 +168,7 @@ function Header() {
             animate={inputAnimation}
             initial={{ scaleX: 0 }}
             transition={{ type: "linear" }}
-            placeholder="제목, 사람"
+            placeholder="한국어로 제목 또는 사람"
           />
           <motion.svg
             onClick={toggleSearch}

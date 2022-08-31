@@ -2,7 +2,12 @@ import { useQuery } from "react-query";
 import styled from "styled-components";
 import { getMovies, getPopMovies, getTopMovies, IGetMovies } from "../api";
 import { makeImagePath } from "../utils";
-import { motion, AnimatePresence, useViewportScroll } from "framer-motion";
+import {
+  motion,
+  AnimatePresence,
+  useViewportScroll,
+  LayoutGroup,
+} from "framer-motion";
 import { useState } from "react";
 import { useMatch, useNavigate } from "react-router-dom";
 
@@ -254,163 +259,185 @@ function Home() {
             <Overview>{wholeOV?.length! > 100 ? OV : wholeOV}</Overview>
           </Banner>
           <SliderWrapper>
-            <Slider>
-              <Div>
-                <SliderTitle>지금 상영 중인 영화</SliderTitle>
-                <Rarr
-                  onClick={() => incrIndex("nowIndex")}
-                  variants={rarrVariants}
-                  initial="start"
-                  whileHover="hover"
-                >
-                  ▶
-                </Rarr>
-              </Div>
-              <AnimatePresence initial={false} onExitComplete={toggleLeaving}>
-                <Row
-                  variants={rowVariants}
-                  transition={{ type: "tween", duration: 1.5 }}
-                  initial="hidden"
-                  animate="visible"
-                  exit="exit"
-                  key={nowIndex}
-                >
-                  {nowData?.results
-                    .slice(1)
-                    .slice(offset * nowIndex, offset * nowIndex + offset)
-                    .map((movie) => (
-                      <Box
-                        key={movie.id}
-                        sliderPhoto={makeImagePath(movie.backdrop_path, "w500")}
-                        variants={boxVariants}
-                        initial="normal"
-                        whileHover="hover"
-                        transition={{ type: "tween" }}
-                        onClick={() => onBoxClicked(movie.id)}
-                        layoutId={movie.id + ""}
-                      >
-                        <Info variants={infoVariants}>
-                          <h4>{movie.title}</h4>
-                        </Info>
-                      </Box>
-                    ))}
-                </Row>
-              </AnimatePresence>
-            </Slider>
-            <Slider>
-              <Div>
-                <SliderTitle>지금 뜨는 콘텐츠</SliderTitle>
-                <Rarr
-                  onClick={() => incrIndex("popIndex")}
-                  variants={rarrVariants}
-                  initial="start"
-                  whileHover="hover"
-                >
-                  ▶
-                </Rarr>
-              </Div>
-              <AnimatePresence initial={false} onExitComplete={toggleLeaving}>
-                <Row
-                  variants={rowVariants}
-                  transition={{ type: "tween", duration: 1.5 }}
-                  initial="hidden"
-                  animate="visible"
-                  exit="exit"
-                  key={popIndex}
-                >
-                  {popData?.results
-                    .slice(1)
-                    .slice(offset * popIndex, offset * popIndex + offset)
-                    .map((movie) => (
-                      <Box
-                        key={movie.id}
-                        sliderPhoto={makeImagePath(movie.backdrop_path, "w500")}
-                        variants={boxVariants}
-                        initial="normal"
-                        whileHover="hover"
-                        transition={{ type: "tween" }}
-                        onClick={() => onBoxClicked(movie.id)}
-                        layoutId={movie.id + ""}
-                      >
-                        <Info variants={infoVariants}>
-                          <h4>{movie.title}</h4>
-                        </Info>
-                      </Box>
-                    ))}
-                </Row>
-              </AnimatePresence>
-            </Slider>
-            <Slider>
-              <Div>
-                <SliderTitle>높은 등급을 받은 영화</SliderTitle>
-                <Rarr
-                  onClick={() => incrIndex("topIndex")}
-                  variants={rarrVariants}
-                  initial="start"
-                  whileHover="hover"
-                >
-                  ▶
-                </Rarr>
-              </Div>
-              <AnimatePresence initial={false} onExitComplete={toggleLeaving}>
-                <Row
-                  variants={rowVariants}
-                  transition={{ type: "tween", duration: 1.5 }}
-                  initial="hidden"
-                  animate="visible"
-                  exit="exit"
-                  key={topIndex}
-                >
-                  {topData?.results
-                    .slice(1)
-                    .slice(offset * topIndex, offset * topIndex + offset)
-                    .map((movie) => (
-                      <Box
-                        key={movie.id}
-                        sliderPhoto={makeImagePath(movie.backdrop_path, "w500")}
-                        variants={boxVariants}
-                        initial="normal"
-                        whileHover="hover"
-                        transition={{ type: "tween" }}
-                        onClick={() => onBoxClicked(movie.id)}
-                        layoutId={movie.id + ""}
-                      >
-                        <Info variants={infoVariants}>
-                          <h4>{movie.title}</h4>
-                        </Info>
-                      </Box>
-                    ))}
-                </Row>
-              </AnimatePresence>
-            </Slider>
+            <LayoutGroup id="1">
+              <Slider>
+                <Div>
+                  <SliderTitle>지금 상영 중인 영화</SliderTitle>
+                  <Rarr
+                    onClick={() => incrIndex("nowIndex")}
+                    variants={rarrVariants}
+                    initial="start"
+                    whileHover="hover"
+                  >
+                    ▶
+                  </Rarr>
+                </Div>
+                <AnimatePresence initial={false} onExitComplete={toggleLeaving}>
+                  <Row
+                    variants={rowVariants}
+                    transition={{ type: "tween", duration: 1.5 }}
+                    initial="hidden"
+                    animate="visible"
+                    exit="exit"
+                    key={nowIndex}
+                  >
+                    {nowData?.results
+                      .slice(1)
+                      .slice(offset * nowIndex, offset * nowIndex + offset)
+                      .map((movie) => (
+                        <Box
+                          key={movie.id}
+                          sliderPhoto={makeImagePath(
+                            movie.backdrop_path,
+                            "w500"
+                          )}
+                          variants={boxVariants}
+                          initial="normal"
+                          whileHover="hover"
+                          transition={{ type: "tween" }}
+                          onClick={() => onBoxClicked(movie.id)}
+                          layoutId={movie.id + ""}
+                        >
+                          <Info variants={infoVariants}>
+                            <h4>{movie.title}</h4>
+                          </Info>
+                        </Box>
+                      ))}
+                  </Row>
+                </AnimatePresence>
+              </Slider>
+            </LayoutGroup>
+            <LayoutGroup id="2">
+              <Slider>
+                <Div>
+                  <SliderTitle>지금 뜨는 콘텐츠</SliderTitle>
+                  <Rarr
+                    onClick={() => incrIndex("popIndex")}
+                    variants={rarrVariants}
+                    initial="start"
+                    whileHover="hover"
+                  >
+                    ▶
+                  </Rarr>
+                </Div>
+                <AnimatePresence initial={false} onExitComplete={toggleLeaving}>
+                  <Row
+                    variants={rowVariants}
+                    transition={{ type: "tween", duration: 1.5 }}
+                    initial="hidden"
+                    animate="visible"
+                    exit="exit"
+                    key={popIndex}
+                  >
+                    {popData?.results
+                      .slice(1)
+                      .slice(offset * popIndex, offset * popIndex + offset)
+                      .map((movie) => (
+                        <Box
+                          key={movie.id}
+                          sliderPhoto={makeImagePath(
+                            movie.backdrop_path,
+                            "w500"
+                          )}
+                          variants={boxVariants}
+                          initial="normal"
+                          whileHover="hover"
+                          transition={{ type: "tween" }}
+                          onClick={() => onBoxClicked(movie.id)}
+                          layoutId={movie.id + ""}
+                        >
+                          <Info variants={infoVariants}>
+                            <h4>{movie.title}</h4>
+                          </Info>
+                        </Box>
+                      ))}
+                  </Row>
+                </AnimatePresence>
+              </Slider>
+            </LayoutGroup>
+            <LayoutGroup id="3">
+              <Slider>
+                <Div>
+                  <SliderTitle>높은 등급을 받은 영화</SliderTitle>
+                  <Rarr
+                    onClick={() => incrIndex("topIndex")}
+                    variants={rarrVariants}
+                    initial="start"
+                    whileHover="hover"
+                  >
+                    ▶
+                  </Rarr>
+                </Div>
+                <AnimatePresence initial={false} onExitComplete={toggleLeaving}>
+                  <Row
+                    variants={rowVariants}
+                    transition={{ type: "tween", duration: 1.5 }}
+                    initial="hidden"
+                    animate="visible"
+                    exit="exit"
+                    key={topIndex}
+                  >
+                    {topData?.results
+                      .slice(1)
+                      .slice(offset * topIndex, offset * topIndex + offset)
+                      .map((movie) => (
+                        <Box
+                          key={movie.id}
+                          sliderPhoto={makeImagePath(
+                            movie.backdrop_path,
+                            "w500"
+                          )}
+                          variants={boxVariants}
+                          initial="normal"
+                          whileHover="hover"
+                          transition={{ type: "tween" }}
+                          onClick={() => onBoxClicked(movie.id)}
+                          layoutId={movie.id + ""}
+                        >
+                          <Info variants={infoVariants}>
+                            <h4>{movie.title}</h4>
+                          </Info>
+                        </Box>
+                      ))}
+                  </Row>
+                </AnimatePresence>
+              </Slider>
+            </LayoutGroup>
           </SliderWrapper>
-          <AnimatePresence>
-            {bigMovieMatch ? (
-              <>
-                <Overlay
-                  onClick={onClickOverlay}
-                  animate={{ opacity: 1 }}
-                  exit={{ opacity: 0 }}
-                />
-                <BigMovie
-                  layoutId={bigMovieMatch.params.movieId}
-                  style={{
-                    top: scrollY.get() + 60,
-                  }}
-                >
-                  {clickedMovie && (
-                    <>
-                      <BigCover
-                        src={makeImagePath(clickedMovie.backdrop_path, "w500")}
-                      />
-                      <BigTitle>{clickedMovie.title}</BigTitle>
-                      <BigOverview>{clickedMovie.overview}</BigOverview>
-                    </>
-                  )}
-                </BigMovie>
-              </>
-            ) : null}
-          </AnimatePresence>
+          {["1", "2", "3"].map((key) => (
+            <LayoutGroup id={key}>
+              <AnimatePresence>
+                {bigMovieMatch ? (
+                  <>
+                    <Overlay
+                      onClick={onClickOverlay}
+                      animate={{ opacity: 1 }}
+                      exit={{ opacity: 0 }}
+                    />
+                    <BigMovie
+                      layoutId={bigMovieMatch.params.movieId}
+                      style={{
+                        top: scrollY.get() + 60,
+                      }}
+                    >
+                      {clickedMovie && (
+                        <>
+                          <BigCover
+                            src={makeImagePath(
+                              clickedMovie.backdrop_path,
+                              "w500"
+                            )}
+                          />
+                          <BigTitle>{clickedMovie.title}</BigTitle>
+                          <BigOverview>{clickedMovie.overview}</BigOverview>
+                        </>
+                      )}
+                    </BigMovie>
+                  </>
+                ) : null}
+              </AnimatePresence>
+            </LayoutGroup>
+          ))}
         </>
       )}
     </Wrapper>
