@@ -195,7 +195,7 @@ function Tv() {
     if (popTvData) {
       if (leaving) return;
       toggleLeaving();
-      const totalMovies = popTvData?.results.length - 1;
+      const totalMovies = popTvData?.results.length;
       const maxIndex = Math.floor(totalMovies / offset) - 1;
       if (indexType === "popTvIndex") {
         setPopTvIndex((index) => (index === maxIndex ? 0 : popTvIndex + 1));
@@ -258,7 +258,6 @@ function Tv() {
                     key={popTvIndex}
                   >
                     {popTvData?.results
-                      .slice(1)
                       .slice(offset * popTvIndex, offset * popTvIndex + offset)
                       .map((movie) => (
                         <Box
@@ -307,7 +306,7 @@ function Tv() {
                   >
                     {topTvData?.results
                       .slice(2)
-                      .slice(offset * popTvIndex, offset * popTvIndex + offset)
+                      .slice(offset * topTvIndex, offset * topTvIndex + offset)
                       .map((movie) => (
                         <Box
                           key={movie.id}
@@ -354,8 +353,7 @@ function Tv() {
                     key={nowTvIndex}
                   >
                     {nowTvData?.results
-                      .slice(1)
-                      .slice(offset * popTvIndex, offset * popTvIndex + offset)
+                      .slice(offset * nowTvIndex, offset * nowTvIndex + offset)
                       .map((movie) => (
                         <Box
                           key={movie.id}

@@ -213,7 +213,7 @@ function Home() {
     if (nowData) {
       if (leaving) return;
       toggleLeaving();
-      const totalMovies = nowData?.results.length - 1;
+      const totalMovies = nowData?.results.length;
       const maxIndex = Math.floor(totalMovies / offset) - 1;
       if (indexType === "popIndex") {
         setPopIndex((index) => (index === maxIndex ? 0 : popIndex + 1));
@@ -282,7 +282,6 @@ function Home() {
                     key={nowIndex}
                   >
                     {nowData?.results
-                      .slice(1)
                       .slice(offset * nowIndex, offset * nowIndex + offset)
                       .map((movie) => (
                         <Box
@@ -330,7 +329,6 @@ function Home() {
                     key={popIndex}
                   >
                     {popData?.results
-                      .slice(1)
                       .slice(offset * popIndex, offset * popIndex + offset)
                       .map((movie) => (
                         <Box
@@ -378,7 +376,6 @@ function Home() {
                     key={topIndex}
                   >
                     {topData?.results
-                      .slice(1)
                       .slice(offset * topIndex, offset * topIndex + offset)
                       .map((movie) => (
                         <Box
