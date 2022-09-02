@@ -10,7 +10,7 @@ import {
 } from "framer-motion";
 import { useState } from "react";
 import { useMatch, useNavigate } from "react-router-dom";
-import { Div, Rarr, rarrVariants } from "./Home";
+import { BigOverview, BigTitle, Div, Rarr, rarrVariants } from "./Home";
 
 const Row = styled(motion.div)`
   padding: 0px 30px;
@@ -60,7 +60,7 @@ const rowVariants = {
 const boxVariants = {
   normal: { scale: 1 },
   hover: {
-    scale: 1.3,
+    scale: 1.4,
     y: -50,
     transition: { delay: 0.4, duration: 0.3 },
   },
@@ -86,27 +86,29 @@ const Loader = styled.div`
 
 const Banner = styled.div<{ bgPhoto: string }>`
   height: 100vh;
-  background-color: #487eb0;
   display: flex;
   flex-direction: column;
   justify-content: center;
   padding: 50px;
-  background-image: linear-gradient(rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.8)),
+  padding-top: 110px;
+  background-image: linear-gradient(rgba(0, 0, 0, 0), 60%, rgba(0, 0, 0, 0.9)),
     url(${(props) => props.bgPhoto});
   background-size: cover;
-  text-shadow: 5px 5px 5px rgba(0, 0, 0, 0.7);
+  text-shadow: 4px 4px 4px rgba(0, 0, 0, 0.5);
 `;
 
 const Title = styled.h2`
   font-size: 60px;
   width: 35%;
+  font-weight: 600;
   margin-bottom: 15px;
 `;
 
 const Overview = styled.p`
-  font-size: 16px;
+  font-size: 15px;
   font-weight: 500;
-  width: 30%;
+  line-height: 1.3;
+  width: 40%;
 `;
 
 const SliderWrapper = styled.div`
@@ -114,7 +116,7 @@ const SliderWrapper = styled.div`
   flex-direction: column;
   justify-content: space-around;
   position: relative;
-  top: -50px;
+  top: -10px;
 `;
 
 const Slider = styled.div`
@@ -136,37 +138,31 @@ const Overlay = styled(motion.div)`
   top: 0;
   width: 100%;
   height: 100%;
-  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 99;
+  background-color: rgba(0, 0, 0, 0.4);
   opacity: 0;
+  cursor: pointer;
 `;
 
 const BigTv = styled(motion.div)`
   position: absolute;
-  width: 50vw;
-  height: 80vh;
+  width: 65vw;
+  height: 120vh;
   left: 0;
   right: 0;
   border-radius: 15px;
   overflow: hidden;
   margin: 0 auto;
-  background-color: ${(props) => props.theme.black.lighter};
-  background: linear-gradient(black, rgba(0, 0, 0, 0.8));
+  z-index: 100;
+  background-color: rgba(24, 24, 24, 1);
 `;
 
-const BigCover = styled.img`
+const BigCover = styled.div<{ CoverImg: string }>`
   width: 100%;
-  height: 70%;
-`;
-
-const BigTitle = styled.h2`
-  padding: 10px;
-  font-size: 22px;
-  color: ${(props) => props.theme.white.lighter};
-`;
-
-const BigOverview = styled.p`
-  font-size: 12px;
-  padding: 5px;
+  height: 55%;
+  background-image: linear-gradient(rgba(0, 0, 0, 0), 80%, rgba(24, 24, 24, 1)),
+    url(${(props) => props.CoverImg});
+  background-size: cover;
 `;
 
 const offset = 5;
@@ -223,7 +219,7 @@ function Tv() {
     navigate(-1);
   };
   const wholeOV = topTvData?.results[0].overview;
-  const OV = wholeOV?.substring(0, wholeOV.length / 3.1);
+  const OV = wholeOV?.substring(0, wholeOV.length);
   return (
     <Wrapper>
       {nowTvLoading || popTvLoading || topTvLoading ? (
@@ -391,13 +387,13 @@ function Tv() {
                     <BigTv
                       layoutId={bigTvMatch.params.tvId}
                       style={{
-                        top: scrollY.get() + 60,
+                        top: scrollY.get() + 30,
                       }}
                     >
                       {clickedTv && (
                         <>
                           <BigCover
-                            src={makeImagePath(clickedTv.backdrop_path, "w500")}
+                            CoverImg={makeImagePath(clickedTv.backdrop_path)}
                           />
                           <BigTitle>{clickedTv.name}</BigTitle>
                           <BigOverview>{clickedTv.overview}</BigOverview>

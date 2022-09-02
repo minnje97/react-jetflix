@@ -7,8 +7,10 @@ import { useForm } from "react-hook-form";
 
 const Nav = styled(motion.nav)`
   display: flex;
+  z-index: 98;
   justify-content: space-between;
   align-items: center;
+  background: linear-gradient(rgba(0, 0, 0, 0.8), 50%, rgba(0, 0, 0, 0));
   position: fixed;
   top: 0px;
   width: 100%;
@@ -41,7 +43,7 @@ const Items = styled.ul`
 
 const Item = styled.li`
   margin-right: 20px;
-  text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.6);
+  text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.5);
   color: ${(props) => props.theme.white.darker};
   transition: color 0.3s ease-in-out;
   &:hover {
@@ -56,9 +58,9 @@ const Item = styled.li`
 
 const Circle = styled(motion.span)`
   position: absolute;
-  width: 7px;
-  height: 7px;
-  top: 20px;
+  width: 5px;
+  height: 5px;
+  top: 22px;
   border-radius: 50%;
   background-color: ${(props) => props.theme.red};
 `;
@@ -84,10 +86,10 @@ const logoVariants = {
 
 const Input = styled(motion.input)`
   transform-origin: right center;
-  padding: 7px 10px;
-  padding-left: 30px;
+  padding: 8px 10px;
+  padding-left: 33px;
   color: white;
-  font-size: 14px;
+  font-size: 13px;
   background-color: transparent;
   border: 1px solid ${(props) => props.theme.white.lighter};
 `;
@@ -174,7 +176,8 @@ function Header() {
             onClick={toggleSearch}
             transition={{ type: "linear" }}
             style={{ cursor: "pointer" }}
-            animate={{ x: searchOpen ? -212 : 0 }}
+            animate={{ x: searchOpen ? -200 : 0 }}
+            whileTap={{ scale: 1.2 }}
             fill="currentColor"
             viewBox="0 0 20 20"
             xmlns="http://www.w3.org/2000/svg"

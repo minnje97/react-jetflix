@@ -4,7 +4,15 @@ import { useMatch, useNavigate, useSearchParams } from "react-router-dom";
 import styled from "styled-components";
 import { multiSearch } from "../api";
 import { makeImagePath } from "../utils";
-import { boxVariants, infoVariants, Overlay } from "./Home";
+import {
+  BigCover,
+  BigMovie,
+  BigOverview,
+  BigTitle,
+  boxVariants,
+  infoVariants,
+  Overlay,
+} from "./Home";
 
 type media = "movie" | "tv";
 
@@ -36,16 +44,17 @@ const Grid = styled.div`
   display: grid;
   grid-template-columns: repeat(5, 1fr);
   gap: 5px;
+  row-gap: 50px;
 `;
 
 const Box = styled(motion.div)<{ sliderPhoto: string }>`
   background-color: white;
   height: 130px;
-  border-radius: 3px;
+  border-radius: 2px;
   background-image: radial-gradient(rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.3)),
     url(${(props) => props.sliderPhoto});
   background-size: cover;
-  background-position: top;
+  background-position: center;
   &:first-child {
     transform-origin: center left;
   }
@@ -66,39 +75,6 @@ const Info = styled(motion.div)`
     text-align: center;
     font-size: 12px;
   }
-`;
-
-const BigMovie = styled(motion.div)`
-  position: absolute;
-  width: 50vw;
-  height: 80vh;
-  left: 0;
-  right: 0;
-  border-radius: 15px;
-  overflow: hidden;
-  margin: 0 auto;
-  background-color: ${(props) => props.theme.black.lighter};
-  background: linear-gradient(black, rgba(0, 0, 0, 0.8));
-`;
-
-const BigCover = styled.div<{ BigPhoto: string }>`
-  background-image: url(${(props) => props.BigPhoto});
-  background-size: contain;
-  background-position: center;
-  background-repeat: no-repeat;
-  width: 100%;
-  height: 80%;
-`;
-
-const BigTitle = styled.h2`
-  padding: 10px;
-  font-size: 22px;
-  color: ${(props) => props.theme.white.lighter};
-`;
-
-const BigOverview = styled.p`
-  font-size: 12px;
-  padding: 5px;
 `;
 
 function Search() {
@@ -160,9 +136,8 @@ function Search() {
               {clickedBox && (
                 <>
                   <BigCover
-                    BigPhoto={makeImagePath(
-                      clickedBox.backdrop_path || clickedBox.profile_path,
-                      "w500"
+                    CoverImg={makeImagePath(
+                      clickedBox.backdrop_path || clickedBox.profile_path
                     )}
                   />
                   <BigTitle>{clickedBox.title || clickedBox.name}</BigTitle>
